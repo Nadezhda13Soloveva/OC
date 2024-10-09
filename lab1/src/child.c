@@ -1,65 +1,54 @@
-#include "utils.h"
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <ctype.h>
 
-int main(const int argc, const char* argv[]) {
-    if (argc != 2) {
-        printf("Necessary arguments were not provided\n");
-        exit(EXIT_FAILURE);
-    }
+#define BUFFER_SIZE 256
 
-    FILE* out = fopen(argv[1], "w");
-    if (!out) {
-        printf("Failed to open file\n");
-        exit(EXIT_FAILURE);
-    }
+double divide_numbers(char *input) {
+    char *token = strtok(input, " ");
+    double result = atof(token);
+    double number;
 
-    char* input = NULL;
-    int strLength;
+    while ((token = strtok(NULL, " ")) != NULL) {
+        if (!isdigit(token[0]) && token[0] != '-') {
+            fprintf(stderr, "Ошибка: обнаружен посторонний символ.\n");
+            exit(EXIT_FAILURE);
+        }
 
-    while ((input = ReadString(stdin)) != NULL) {
-        strLength = strlen(input);
+        number = atof(token);
+        if (number == 0) {
+            fprintf(stderr, "Ошибка: деление на ноль.\n");
+            exit(EXIT_FAILURE);
+        }
         
-        int firstNumber = 0;
-        int divisor;
-        char flag = 0;
-
-        // Преобразование строки в числа
-        // Здесь мы ищем первое число
-        char* token = strtok(input, " ");
-        if (token != NULL) {
-            firstNumber = atoi(token);
-        }
-
-        // Обработка последующих чисел
-        token = strtok(NULL, " ");
-        while (token != NULL) {
-            divisor = atoi(token);
-            
-            // Проверка на деление на ноль
-            if (divisor == 0) {
-                printf("Division by zero detected. Exiting.\n");
-                fclose(out);
-                free(input);
-                exit(EXIT_FAILURE);
-            }
-
-            // Выполняем деление
-            firstNumber /= divisor;
-
-            // Переход к следующему числу
-            token = strtok(NULL, " ");
-            flag = 1; // Устанавливаем флаг, что было хотя бы одно деление
-        }
-
-        // Если были произведены деления, записываем результат
-        if (flag == 1) {
-            fprintf(out, "%d\n", firstNumber);
-        }
-
-        free(input);
+        result /= number;
     }
 
-    fclose(out);
+    return result;
+}
+
+int main() {
+    char buffer[BUFFER_SIZE];
+    char filename[BUFFER_SIZE];
+
+    fgets(filename, BUFFER_SIZE, stdin);
+    filename[strcspn(filename, "\n")] = '\0'; 
+
+    FILE *file = fopen(filename, "w");
+    if (!file) {
+        perror("fopen");
+        exit(EXIT_FAILURE);
+    }
+
+    while (fgets(buffer, BUFFER_SIZE, stdin)) {
+
+        buffer[strcspn(buffer, "\n")] = '\0';
+
+        double result = divide_numbers(buffer);
+        fprintf(file, "%.2f\n", result);
+    }
+
+    fclose(file);
     return 0;
 }

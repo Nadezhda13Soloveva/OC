@@ -1,42 +1,54 @@
-#include "parent.h"
-#include "utils.h"
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
 #include <sys/wait.h>
 
-void ParentRoutine(const char* pathToChild, FILE* stream) {
-    char fileName[256];
-    fscanf(stream, "%s\n", fileName);
+#define BUFFER_SIZE 256
 
-    int parentPipe[2];
-    CreatePipe(parentPipe);
+int main() {
+    int pipefd[2];
+    pid_t pid;
+    char buffer[BUFFER_SIZE];
 
-    int pid = fork();
-
-    if(pid == 0) {
-        close(parentPipe[WRITE_END]);
-
-        dup2(parentPipe[READ_END], 0);
-
-        char* argv[3];
-        argv[0] = "child";
-        argv[1] = fileName;
-        argv[2] = NULL;
-
-        if(execv(pathToChild, argv) == -1) {
-            printf("Failed to exec\n");
-        }
-    } else {
-        close(parentPipe[READ_END]);
-        char* input = NULL;
-
-        while((input = ReadString(stream)) != NULL) {
-
-            write(parentPipe[WRITE_END], input, strlen(input));
-
-            free(input);
-        }
-
-        close(parentPipe[WRITE_END]);
-        wait(NULL);
+    if (pipe(pipefd) == -1) {
+        perror("pipe");
+        exit(EXIT_FAILURE);
     }
+
+    pid = fork();
+    if (pid == -1) {
+        perror("fork");
+        exit(EXIT_FAILURE);
+    }
+
+    if (pid == 0) { 
+        close(pipefd[1]); 
+        
+        dup2(pipefd[0], STDIN_FILENO);
+        execl("../lab1/child", "child", NULL);
+        perror("execl");
+        exit(EXIT_FAILURE);
+    } else { 
+        close(pipefd[0]); 
+
+        printf("Введите название файла: ");
+        fgets(buffer, BUFFER_SIZE, stdin);
+        write(pipefd[1], buffer, strlen(buffer));
+
+        printf("Введите команду (или пустую строку для завершения):\n");
+        while (1) {
+            fgets(buffer, BUFFER_SIZE, stdin);
+
+            if (buffer[0] == '\n') { 
+                break;
+            }
+
+            write(pipefd[1], buffer, strlen(buffer));
+        }
+
+        close(pipefd[1]);
+        wait(NULL); 
+    }
+    return 0;
 }

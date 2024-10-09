@@ -1,16 +1,9 @@
-set(CMAKE_C_STANDARD 11)
+cmake_minimum_required(VERSION 3.10)
 
-add_executable(lab2
-        main.c
-        src/parent.c
-        include/utils.h src/utils.c)
+project(lab1)
 
-target_include_directories(lab2 PRIVATE include)
+set(CMAKE_C_STANDARD 17)
 
-add_executable(child
-        src/child.c
-        include/utils.h src/utils.c)
+add_executable(parent src/parent.c)
+add_executable(child src/child.c)
 
-target_include_directories(child PRIVATE include)
-
-add_dependencies(lab2 child)
