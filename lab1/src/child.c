@@ -7,11 +7,20 @@
 
 double divide_numbers(char *input) {
     char *token = strtok(input, " ");
+
+    // Проверка первого числа
+    for (int i = 0; token[i] != '\0'; i++) {
+        if (!isdigit(token[i]) && token[i] != '-') {
+            fprintf(stderr, "Ошибка: обнаружен посторонний символ.\n");
+            exit(EXIT_FAILURE);
+        }
+    }
+    
     double result = atof(token);
     double number;
 
     while ((token = strtok(NULL, " ")) != NULL) {
-        // Проверяем каждый символ токена
+
         for (int i = 0; token[i] != '\0'; i++) {
             if (!isdigit(token[i]) && token[i] != '-') {
                 fprintf(stderr, "Ошибка: обнаружен посторонний символ.\n");
