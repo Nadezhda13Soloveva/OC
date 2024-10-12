@@ -22,15 +22,16 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    if (pid == 0) { 
-        close(pipefd[1]); 
+    if (pid == 0) { // child
+        close(pipefd[1]); // close pipe for child writing
         
         dup2(pipefd[0], STDIN_FILENO);
         execl("../lab1/child", "child", NULL);
         perror("execl");
         exit(EXIT_FAILURE);
-    } else { 
-        close(pipefd[0]); 
+    } 
+    else { // parent
+        close(pipefd[0]); // close pipe for parent reading
 
         printf("Введите название файла: ");
         fgets(buffer, BUFFER_SIZE, stdin);
@@ -47,7 +48,7 @@ int main() {
             write(pipefd[1], buffer, strlen(buffer));
         }
 
-        close(pipefd[1]);
+        close(pipefd[1]); // close pipe for parent writing
         wait(NULL); 
     }
     return 0;

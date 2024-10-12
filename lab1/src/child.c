@@ -11,9 +11,12 @@ double divide_numbers(char *input) {
     double number;
 
     while ((token = strtok(NULL, " ")) != NULL) {
-        if (!isdigit(token[0]) && token[0] != '-') {
-            fprintf(stderr, "Ошибка: обнаружен посторонний символ.\n");
-            exit(EXIT_FAILURE);
+        // Проверяем каждый символ токена
+        for (int i = 0; token[i] != '\0'; i++) {
+            if (!isdigit(token[i]) && token[i] != '-') {
+                fprintf(stderr, "Ошибка: обнаружен посторонний символ.\n");
+                exit(EXIT_FAILURE);
+            }
         }
 
         number = atof(token);
