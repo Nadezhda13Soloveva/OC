@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 // Задачка потоков по поступившим аргументам
 void* convolveCells(void* arg) {
     ThreadData* data = (ThreadData*)arg;
@@ -38,8 +37,16 @@ void printMatrix(int** matrix, int rows, int cols) {
 // Инициализирую матрицы
 int** createMatrix(int N) {
     int** matrix = (int**)malloc(N * sizeof(int*));
+    if (!matrix) {
+        fprintf(stderr, "Error allocating memory for matrix.\n");
+        exit(EXIT_FAILURE);
+    }
     for (int i = 0; i < N; i++) {
         matrix[i] = (int*)malloc(N * sizeof(int));
+        if (!matrix[i]) {
+            fprintf(stderr, "Error allocating memory for matrix row.\n");
+            exit(EXIT_FAILURE);
+        }
         for (int j = 0; j < N; j++) {
             matrix[i][j] = i * N + j + 1;
         }
@@ -50,8 +57,23 @@ int** createMatrix(int N) {
 // Создаю пул потоков, выделяя память для структурки пула, массива потоков и данных потоков
 ThreadPool* createThreadPool(int numThreads) {
     ThreadPool* pool = (ThreadPool*)malloc(sizeof(ThreadPool));
+    if (!pool) {
+        fprintf(stderr, "Error allocating memory for thread pool.\n");
+        exit(EXIT_FAILURE);
+    }
     pool->threads = (pthread_t*)malloc(numThreads * sizeof(pthread_t));
+    if (!pool->threads) {
+        fprintf(stderr, "Error allocating memory for threads.\n");
+        free(pool);
+        exit(EXIT_FAILURE);
+    }
     pool->threadData = (ThreadData*)malloc(numThreads * sizeof(ThreadData));
+    if (!pool->threadData) {
+        fprintf(stderr, "Error allocating memory for thread data.\n");
+        free(pool->threads);
+        free(pool);
+        exit(EXIT_FAILURE);
+    }
     pool->numThreads = numThreads;
     return pool;
 }
@@ -96,8 +118,16 @@ void runConvolutionTasks(ThreadPool* pool, int** matrix, int** output, int N, in
 int** convolve(ThreadPool* pool, int** matrix, int N, int M) {
     int outputSize = N - M + 1;
     int** output = (int**)malloc(outputSize * sizeof(int*));
+    if (!output) {
+        fprintf(stderr, "Error allocating memory for output matrix.\n");
+        exit(EXIT_FAILURE);
+    }
     for (int i = 0; i < outputSize; i++) {
         output[i] = (int*)malloc(outputSize * sizeof(int));
+        if (!output[i]) {
+            fprintf(stderr, "Error allocating memory for output matrix row.\n");
+            exit(EXIT_FAILURE);
+        }
     }
 
     int numCells = outputSize * outputSize;

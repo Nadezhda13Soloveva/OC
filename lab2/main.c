@@ -13,7 +13,7 @@ int main(int argc, char* argv[]) {
     int M = atoi(argv[2]);
     int K = atoi(argv[3]);
     int maxThreads = atoi(argv[4]);
-    
+
     // Чек параметров на адекватность
     if (M <= 0 || N <= 0) {
         fprintf(stderr, "Error: Matrix size must be greater than 0.\n");
@@ -56,27 +56,31 @@ int main(int argc, char* argv[]) {
     ThreadPool* pool = createThreadPool(maxThreads);
 
     int** currentMatrix = matrix;
+    int currentSize = N;
     for (int i = 0; i < K; i++) {
-        currentMatrix = convolve(pool, currentMatrix, N, M);
-        int outputSize = N - M + 1;
-        if (i + 1 == K && outputSize * outputSize < 576) {
-            printf("\nMatrix after convolution:\n");
-            printMatrix(currentMatrix, outputSize, outputSize);
+        int** newMatrix = convolve(pool, currentMatrix, currentSize, M);
+        if (i != 0) {
+            freeMatrix(currentMatrix, currentSize);
         }
-        N = outputSize;
+        currentMatrix = newMatrix;
+        currentSize = currentSize - M + 1;
+
+        if (i + 1 == K && currentSize * currentSize < 576) {
+            printf("\nMatrix after convolution:\n");
+            printMatrix(currentMatrix, currentSize, currentSize);
+        }
     }
 
     destroyThreadPool(pool);
 
     freeMatrix(matrix, N);
-    if (currentMatrix != NULL) {
-        freeMatrix(currentMatrix, N);
+    if (currentMatrix != matrix) {
+        freeMatrix(currentMatrix, currentSize);
     }
 
     clock_t end = clock();
     double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
-    printf("\nUsed threads: %d\n", (N * N < maxThreads) ? (N * N) : maxThreads);
+    printf("\nUsed threads: %d\n", (currentSize * currentSize < maxThreads) ? (currentSize * currentSize) : maxThreads);
     printf("Time spent: %.5f seconds\n", time_spent);
 
-    return 0;
-}
+    return 0;}
