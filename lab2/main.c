@@ -14,6 +14,7 @@ int main(int argc, char* argv[]) {
     int K = atoi(argv[3]);
     int maxThreads = atoi(argv[4]);
     
+    // Чек параметров на адекватность
     if (M <= 0 || N <= 0) {
         fprintf(stderr, "Error: Matrix size must be greater than 0.\n");
         return 1;

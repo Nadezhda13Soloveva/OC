@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+// Задачка потоков по поступившим аргументам
 void* convolveCells(void* arg) {
     ThreadData* data = (ThreadData*)arg;
     int** inputMatrix = data->inputMatrix;
@@ -23,6 +25,7 @@ void* convolveCells(void* arg) {
     return NULL;
 }
 
+// Вывод матриц
 void printMatrix(int** matrix, int rows, int cols) {
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
@@ -32,6 +35,7 @@ void printMatrix(int** matrix, int rows, int cols) {
     }
 }
 
+// Инициализирую матрицы
 int** createMatrix(int N) {
     int** matrix = (int**)malloc(N * sizeof(int*));
     for (int i = 0; i < N; i++) {
@@ -43,6 +47,7 @@ int** createMatrix(int N) {
     return matrix;
 }
 
+// Создаю пул потоков, выделяя память для структурки пула, массива потоков и данных потоков
 ThreadPool* createThreadPool(int numThreads) {
     ThreadPool* pool = (ThreadPool*)malloc(sizeof(ThreadPool));
     pool->threads = (pthread_t*)malloc(numThreads * sizeof(pthread_t));
@@ -51,12 +56,14 @@ ThreadPool* createThreadPool(int numThreads) {
     return pool;
 }
 
+// Деструктор пула
 void destroyThreadPool(ThreadPool* pool) {
     free(pool->threads);
     free(pool->threadData);
     free(pool);
 }
 
+// Распределение задач по потокам
 void runConvolutionTasks(ThreadPool* pool, int** matrix, int** output, int N, int M, int numCells) {
     int outputSize = N - M + 1;
     int usedThreads = (numCells < pool->numThreads) ? numCells : pool->numThreads;
@@ -85,6 +92,7 @@ void runConvolutionTasks(ThreadPool* pool, int** matrix, int** output, int N, in
     }
 }
 
+// Обобщенная функция свертки + инициализация результирующей матрицы
 int** convolve(ThreadPool* pool, int** matrix, int N, int M) {
     int outputSize = N - M + 1;
     int** output = (int**)malloc(outputSize * sizeof(int*));
@@ -98,6 +106,7 @@ int** convolve(ThreadPool* pool, int** matrix, int N, int M) {
     return output;
 }
 
+// Деструктор матриц
 void freeMatrix(int** matrix, int rows) {
     for (int i = 0; i < rows; i++) {
         free(matrix[i]);
