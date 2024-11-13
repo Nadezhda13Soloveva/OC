@@ -125,6 +125,10 @@ int** convolve(ThreadPool* pool, int** matrix, int N, int M) {
     for (int i = 0; i < outputSize; i++) {
         output[i] = (int*)malloc(outputSize * sizeof(int));
         if (!output[i]) {
+            for (int j = 0; j < i; j++) {
+                free(output[j]);
+            }
+            free(output);  // Освобождаем сам массив
             fprintf(stderr, "Error allocating memory for output matrix row.\n");
             exit(EXIT_FAILURE);
         }
