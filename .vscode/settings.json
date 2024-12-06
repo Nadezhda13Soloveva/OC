@@ -1,6 +1,7 @@
 {
     "cmake.ignoreCMakeListsMissing": true,
     "files.associations": {
-        "chrono": "cpp"
+        "chrono": "cpp",
+        "stdlib.h": "c"
     }
 }

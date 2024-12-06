@@ -28,7 +28,6 @@ int main(int argc, char* argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    // открываем файл для записи результатов
     FILE *output_file = fopen(argv[2], "w");
     if (!output_file) {
         perror("Failed to open output file\n");

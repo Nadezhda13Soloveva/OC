@@ -15,26 +15,23 @@ int main(void) {
     scanf("%s", file_name);
     getchar(); // чтобы считать и удалить \n из буфера
 
-    // открытие файла в режиме: создается, если его не существует, и зануляется, если уже существует, только для записи
     int file = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if (file < 0) {
         perror("Failed to open file\n");
         exit(EXIT_FAILURE);
     }
 
-    // открываю объект разделяемой памяти в режиме: создается, если его не существует, для чтения и записи
     int fd = shm_open(SHM_NAME, O_CREAT | O_RDWR, 0666);
     if (fd == -1) {
         perror("Failed to open shared_memory\n");
         exit(EXIT_FAILURE);
     }
-    // resize объекта разделяемой памяти под структурку
+
     if (ftruncate(fd, sizeof(shared_data)) == -1) {
         perror("Failed to set size ftruncate\n");
         exit(EXIT_FAILURE);
     }
 
-    // отображаю объект разделяемой памяти в адресное пространство в режиме чтения и записи, изменения будут видны другим процессам, отображение с начала объекта (смещение 0)
     shared_data *shm = mmap(NULL, sizeof(shared_data), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
     if (shm == MAP_FAILED) {
         perror("Failed to map to the address space (mmap)\n");
@@ -81,11 +78,11 @@ int main(void) {
 
     waitpid(child, NULL, 0);
 
-    destroy(shm); // зачищаю семафоры
+    destroy(shm);
 
-    munmap(shm, sizeof(shared_data)); // удаляю отображение из адресного пространства
+    munmap(shm, sizeof(shared_data)); 
     close(fd);
-    shm_unlink(SHM_NAME); // удаляю объект разделяемой памяти
+    shm_unlink(SHM_NAME); 
 
     close(file);
 
