@@ -1,10 +1,15 @@
-#include "../include/common.h"
 #include "../include/message.h"
+#include "../include/dict.h"
 #include <sys/wait.h>
 #include <errno.h>
 #include <time.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <zmq.h>
 
-// 
+#define BASE_PORT 5550
+
 DictEntry dictionary[MAX_DICT_ENTRIES];
 
 void init_dictionary() {

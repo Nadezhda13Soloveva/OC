@@ -1,4 +1,5 @@
 #include "../include/dict.h"
+#include <string.h>
 
 // Инит словаря
 void dict_init(Dictionary* dict) {
@@ -16,7 +17,7 @@ int dict_set(Dictionary* dict, const char* key, int value) {
     }
     
     // Добавление нового ключа
-    if (dict->size < MAX_DICT_SIZE) {
+    if (dict->size < MAX_DICT_ENTRIES) {
         strncpy(dict->entries[dict->size].key, key, MAX_KEY_LEN - 1);
         dict->entries[dict->size].value = value;
         dict->size++;

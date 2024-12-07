@@ -1,20 +1,20 @@
 #ifndef DICT_H
 #define DICT_H
 
-#include <string.h>
-
+// Для словаря
+#define MAX_DICT_ENTRIES 100
 #define MAX_KEY_LEN 64
-#define MAX_DICT_SIZE 100
 
-// Тоже структурка для записей словаря
+// Структурка для записей словаря
 typedef struct {
     char key[MAX_KEY_LEN];
     int value;
+    int is_set; // флаг установлено ли значение
 } DictEntry;
 
 // Словарь: массив записей и размер
 typedef struct {
-    DictEntry entries[MAX_DICT_SIZE];
+    DictEntry entries[MAX_DICT_ENTRIES];
     int size;
 } Dictionary;
 

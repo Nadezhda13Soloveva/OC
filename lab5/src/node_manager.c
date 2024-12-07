@@ -1,5 +1,7 @@
 #include "../include/node_manager.h"
 #include <stdlib.h>
+#include "unistd.h"
+#include "sys/types.h"
 
 Node* head = NULL; // изначально список пуст
 

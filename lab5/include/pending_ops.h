@@ -1,9 +1,8 @@
 #ifndef PENDING_OPS_H
 #define PENDING_OPS_H
 
-#include "common.h"
-#include "message.h"
 #include <time.h>
+#include "message.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -1,7 +1,9 @@
 #include "../include/pending_ops.h"
+#include "../include/message.h"
 #include <string.h>
 #include <zmq.h>
 #include <stdio.h>
+#include <time.h>
 
 #define MAX_PENDING 100
 #define DEFAULT_TIMEOUT 1000  // 1 сек по умолчанию

@@ -1,4 +1,3 @@
-#include "../include/common.h"
 #include "../include/message.h"
 #include "../include/pending_ops.h"
 #include "../include/node_manager.h"
@@ -11,6 +10,7 @@
 #include <poll.h>
 #include <signal.h>
 
+#define BASE_PORT 5550
 #define MAX_NODES 100
 
 // Function to create the root node (returns 0 on success)

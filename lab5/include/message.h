@@ -1,9 +1,9 @@
 #ifndef MESSAGE_H
 #define MESSAGE_H
 
-#include "common.h"
 
 #define MAX_CMD_LEN 16
+#define MAX_MSG_LEN 256
 
 #ifdef __cplusplus
 extern "C" { // для тестов

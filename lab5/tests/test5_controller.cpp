@@ -3,9 +3,11 @@
 #include <unistd.h>
 #include <signal.h>
 #include "message.h"
-#include "common.h"
+#include "dict.h"
 #include "node_manager.h"
 #include "pending_ops.h"
+
+#define BASE_PORT 5550
 
 class ControllerTest : public ::testing::Test {
 protected:
