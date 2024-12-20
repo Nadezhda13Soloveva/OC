@@ -31,8 +31,8 @@
    Команда проверки 2: *"Формат команды: ping id. Команда проверяет доступность конкретного узла. Если узла нет, то необходимо выводить ошибку: «Error: Not found» "*  
    
 
-4. **Код решения**: [controller](controller.c), [worker](worker.c) 
-    Общее дерево взаимодействия
+4. **Код решения**: [controller](controller.c), [worker](worker.c)   
+    Общее дерево взаимодействия  
     ```
     controller.c:main()
     ├── create_root_node()
