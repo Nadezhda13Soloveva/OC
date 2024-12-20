@@ -3,7 +3,6 @@
 
 #include "allocator.h"
 
-// Create best fit allocator
 Allocator* createBestFitAllocator(void* memory, size_t size);
 
 #endif 

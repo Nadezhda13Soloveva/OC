@@ -3,9 +3,8 @@
 
 #include "allocator.h"
 
-#define MAX_POWER 32  // Maximum power of 2 (4GB)
+#define MAX_POWER 32  // макс степень 2-ки (4GB)
 
-// Create power of 2 allocator
 Allocator* createPower2Allocator(void* memory, size_t size);
 
 #endif 

@@ -42,6 +42,7 @@ void handle_exec(void* socket, Message* msg) {
 
 // проверка доступности узлов
 int ping_node(void* socket) {
+
     Message msg = {0};
     // создаем сообщение с командой
     strcpy(msg.command, "PING");

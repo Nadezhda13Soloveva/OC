@@ -13,10 +13,10 @@ void run_tests(Allocator* allocator, const char* name) {
     clock_t start, end;
     double alloc_time = 0, free_time = 0;
 
-    // Test allocation
+    // тест выделения
     start = clock();
     for (int i = 0; i < TEST_ITERATIONS; i++) {
-        size_t size = rand() % 1024 + 1;  // Random size 1-1024 bytes
+        size_t size = rand() % 1024 + 1;  // рандомный размер 1-1024 bytes
         total_requested += size;
         blocks[i] = allocatorAlloc(allocator, size);
         if (blocks[i] == NULL) {
@@ -26,10 +26,10 @@ void run_tests(Allocator* allocator, const char* name) {
     end = clock();
     alloc_time = ((double)(end - start)) / CLOCKS_PER_SEC;
 
-    // Get statistics after allocation
+    // фикс статистики
     AllocatorStats stats_after_alloc = getStats(allocator);
 
-    // Test deallocation
+    // тест освобождения
     start = clock();
     for (int i = 0; i < TEST_ITERATIONS; i++) {
         allocatorFree(allocator, blocks[i]);
@@ -37,7 +37,7 @@ void run_tests(Allocator* allocator, const char* name) {
     end = clock();
     free_time = ((double)(end - start)) / CLOCKS_PER_SEC;
 
-    // Get statistics after deallocation
+    // фикс статистики
     AllocatorStats stats_after_free = getStats(allocator);
 
     printf("\nResults for %s:\n", name);
@@ -64,7 +64,7 @@ int main() {
     Allocator* best_fit = createBestFitAllocator(memory1, MEMORY_SIZE);
     Allocator* power2 = createPower2Allocator(memory2, MEMORY_SIZE);
 
-    srand(time(NULL));
+    srand(time(NULL)); // инит генератора случайных чисел 
 
     run_tests(best_fit, "Best-fit Allocator");
     run_tests(power2, "Power-of-2 Allocator");

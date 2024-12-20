@@ -5,36 +5,37 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-// Forward declarations
 typedef struct Allocator Allocator;
 typedef struct AllocatorStats AllocatorStats;
 
-// Function pointer types
+// типы указателей на функции
 typedef void* (*AllocFn)(Allocator*, size_t);
 typedef void (*FreeFn)(Allocator*, void*);
 typedef AllocatorStats (*StatsFn)(Allocator*);
 
-// Vtable structure
+// структурка таблицы виртуальных функций
 typedef struct {
     AllocFn alloc;
     FreeFn free;
     StatsFn getStats;
 } AllocatorVTable;
 
-// Base allocator structure
+// базовая структурка аллокатора
 struct Allocator {
     AllocatorVTable* vtable;
 };
 
-// Statistics structure
+// структурка для хранения статистики
 struct AllocatorStats {
     size_t total_memory;
     size_t used_memory;
     size_t free_memory;
-    double utilization;
+    double utilization; // коэф-т использования памяти
 };
 
-// Interface functions
+// интерфейсные функции для функций из AllocatorVTable
+// static - каждая единица трансляции, включающая этот заголовочный файл, будет иметь свою собственную версию функции, что устраняет конфликты при линковке
+// inline - функция будет встраиваться в точку вызова
 static inline void* allocatorAlloc(Allocator* allocator, size_t size) {
     return allocator->vtable->alloc(allocator, size);
 }
