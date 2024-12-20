@@ -31,6 +31,73 @@
    Команда проверки 2: *"Формат команды: ping id. Команда проверяет доступность конкретного узла. Если узла нет, то необходимо выводить ошибку: «Error: Not found» "*  
    
 
-4. **Код решения**: [controller](controller.c), [worker](worker.c)  
+4. **Код решения**: [controller](controller.c), [worker](worker.c) 
+    Общее дерево взаимодействия
+    ```
+    controller.c:main()
+    ├── create_root_node()
+    │   └── add_node()
+    ├── check_user_input()
+    ├── create_node()
+    │   ├── find_node()
+    │   ├── zmq_connect()
+    │   ├── send_message()
+    │   ├── receive_message()
+    │   └── add_node()
+    ├── exec_command()
+    │   ├── find_node()
+    │   ├── zmq_connect()
+    │   ├── send_message()
+    │   └── add_pending_operation()
+    ├── ping_command()
+    │   ├── find_node()
+    │   ├── zmq_connect()
+    │   ├── send_message()
+    │   └── add_pending_operation()
+    ├── kill_node()
+    └── check_pending_operations()
+        ├── receive_message()
+        ├── handle_ping_response()
+        ├── handle_exec_response()
+        ├── handle_create_response()
+        └── remove_operation()
+
+    worker.c:main()
+    └── start_compute_node()
+        ├── zmq_bind()
+        ├── zmq_setsockopt()
+        ├── ping_node()
+        │   ├── send_message()
+        │   └── receive_message()
+        ├── receive_message()
+        └── handle_exec()
+            ├── dict_set()
+            ├── dict_get()
+            └── send_message()
+
+    dict.c
+    ├── dict_init()
+    ├── dict_set()
+    └── dict_get()
+
+    node_manager.c
+    ├── add_node()
+    └── find_node()
+
+    pending_ops.c
+    ├── add_pending_operation()
+    ├── handle_ping_response()
+    ├── handle_exec_response()
+    ├── handle_create_response()
+    ├── remove_operation()
+    ├── check_pending_operations()
+    │   ├── receive_message()
+    │   ├── handle_ping_response()
+    │   ├── handle_exec_response()
+    │   ├── handle_create_response()
+    │   └── remove_operation()
+    └── cleanup_pending_operations()
+    ```
+
 5. **Тестовые данные**: [test](tests/test5_controller.cpp)  
 6. **Вывод:** В процессе выполнения лабораторной работы я чуть не отбросила коньки. Какой-то лютый треш, но мы справились. Лирическое отступление закончено. Так вот, в роцессе выполнения лабораторной работы успешно реализовали систему с ассинхронной обработкой запросов. Научились обеспечивать управление серверами сообщений с помощью технологии очередей сообщений ZeroMQ. Как говорится: "Этот год был непростым". Личная оценка: 6/10.
