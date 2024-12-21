@@ -1,0 +1,45 @@
+1777  execve("./parent", ["./parent"], 0x7ffec4052b98 /* 26 vars */) = 0
+1777  read(3, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0P\237\2\0\0\0\0\0"..., 832) = 832
+1777  clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7f2452208a10) = 1778
+1778  dup2(3, 0)                        = 0
+1778  execve("../lab1/child", ["child"], 0x7ffc8cab4bd8 /* 26 vars */) = 0
+1777  write(1, "\320\222\320\262\320\265\320\264\320\270\321\202\320\265 \320\275\320\260\320\267\320\262\320\260\320\275\320\270\320\265 "..., 44) = 44
+1777  read(0,  <unfinished ...>
+1778  read(4, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0P\237\2\0\0\0\0\0"..., 832) = 832
+1778  read(0,  <unfinished ...>
+1777  <... read resumed>"result.txt\n", 1024) = 11
+1777  write(4, "result.txt\n", 11)      = 11
+1777  write(1, "\320\222\320\262\320\265\320\264\320\270\321\202\320\265 \320\272\320\276\320\274\320\260\320\275\320\264\321\203 (\320"..., 94 <unfinished ...>
+1778  <... read resumed>"result.txt\n", 4096) = 11
+1777  <... write resumed>)              = 94
+1777  read(0,  <unfinished ...>
+1778  read(0,  <unfinished ...>
+1777  <... read resumed>"133\n", 1024)  = 4
+1777  write(4, "133\n", 4)              = 4
+1778  <... read resumed>"133\n", 4096)  = 4
+1777  read(0,  <unfinished ...>
+1778  read(0,  <unfinished ...>
+1777  <... read resumed>"-144 12 -32\n", 1024) = 12
+1777  write(4, "-144 12 -32\n", 12)     = 12
+1778  <... read resumed>"-144 12 -32\n", 4096) = 12
+1777  read(0,  <unfinished ...>
+1778  read(0,  <unfinished ...>
+1777  <... read resumed>"24 89\n", 1024) = 6
+1777  write(4, "24 89\n", 6)            = 6
+1778  <... read resumed>"24 89\n", 4096) = 6
+1777  read(0,  <unfinished ...>
+1778  read(0,  <unfinished ...>
+1777  <... read resumed>"89 g5\n", 1024) = 6
+1777  write(4, "89 g5\n", 6)            = 6
+1778  <... read resumed>"89 g5\n", 4096) = 6
+1777  read(0,  <unfinished ...>
+1778  write(2, "\320\236\321\210\320\270\320\261\320\272\320\260: \320\276\320\261\320\275\320\260\321\200\321\203\320\266\320\265\320\275"..., 70) = 70
+1778  write(4, "133.00\n0.38\n0.27\n", 17) = 17
+1778  exit_group(1)                     = ?
+1778  +++ exited with 1 +++
+1777  <... read resumed>0x6c16b0, 1024) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+1777  --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=1778, si_uid=1000, si_status=1, si_utime=0, si_stime=2} ---
+1777  read(0, "\n", 1024)               = 1
+1777  wait4(-1, NULL, 0, NULL)          = 1778
+1777  exit_group(0)                     = ?
+1777  +++ exited with 0 +++
